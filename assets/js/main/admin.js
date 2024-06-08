@@ -199,6 +199,7 @@ function approveDeposit(id, userId) {
     })
 }
 
+
 const userList = document.getElementById("userList")
 
 if (userList) {
@@ -211,6 +212,7 @@ if (userList) {
     })
     .then((res)=>{
         let items = res.data
+        console.log("items",items)
         let htmlTemp =``
         items.map((item)=>{
             htmlTemp+=` <tr>
@@ -221,6 +223,10 @@ if (userList) {
             <td>
             <p class="text-xs font-weight-bold mb-0">${item.name}</p>
           </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">${item.verified}</p>
+          </td>
+          
            
             <td class="align-middle text-center">
               <span class="text-secondary text-xs font-weight-bold">${item.UserId}</span>
@@ -351,6 +357,38 @@ if (sumAll) {
 
 let updateBalanceForm = document.getElementById("updateBalanceForm")
 
+function approveVerifcation(action, userId) {
+  console.log(action, userId)
+  axios({
+      url:"/update-verification",
+      method:"post",
+      data:{
+          userId, 
+          action
+      },
+      headers:{
+          Authorization:`Bearer ${token}`
+      }
+  })
+  .then((res)=>{
+      console.log(res)
+     Toast.fire({
+      icon: 'success',
+      title: `${res.data.message}`
+     })
+     .then(()=>{
+        window.location.reload()
+     })
+  })
+  .catch((err)=>{
+      Toast.fire({
+          icon: 'error',
+          title:  `${err.response.data.message}`
+        })
+      console.log(err)
+  })
+}
+
 if(updateBalanceForm){
   // Get the URL parameters
   const urlParams = new URLSearchParams(window.location.search);
@@ -368,15 +406,65 @@ if(updateBalanceForm){
     .then((res)=>{
       console.log(res)
       let infoB = document.getElementById("infoB")
-      updateBalanceForm.balance.value=res.data.balance
+      let infoC = document.getElementById("infoC")
+      let infoD = document.getElementById("infoD")
+      updateBalanceForm.balance.value=res.data.userProfile.balance
       infoB.innerHTML=`
       <ul class="list-group">
-        <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Full Name:</strong> &nbsp; ${res.data.name}</li>
-        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Email:</strong> &nbsp; ${res.data.email}</li>
-        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Password:</strong> &nbsp; ${res.data.password}</li>
-        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Balance:</strong> &nbsp; ${res.data.balance}</li>
+        <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Full Name:</strong> &nbsp; ${res.data.userProfile.name}</li>
+        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Email:</strong> &nbsp; ${res.data.userProfile.email}</li>
+        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Password:</strong> &nbsp; ${res.data.userProfile.password}</li>
+        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Balance:</strong> &nbsp; ${res.data.userProfile.balance}</li>
        
       </ul>`
+      if (res.data.verified=="submitted") {
+        
+        infoC.innerHTML=`
+        <div>
+        <h4>Front View</h4>
+        <img src='${res.data.userProfile.kycVerification.frontImageUrl}' style="width:100vw; height:100%;"/>
+        </div>
+        <div>
+        <h4>Back View</h4>
+        <img src='${res.data.userProfile.kycVerification.backImageUrl}'/>
+        <span class="badge badge-sm bg-gradient-success" onclick='approveVerifcation(${JSON.stringify('approved')}, ${JSON.stringify(res.data.userProfile._id)})'>Approve 
+              </span>
+              <span class="badge badge-sm bg-gradient-warning" onclick='approveVerifcation(${JSON.stringify('declined')}, ${JSON.stringify(res.data.userProfile._id)})'>Decline
+              </span>
+        </div>
+       `
+      }if (res.data.userProfile.verified=="approved") {
+        infoC.innerHTML = `<h4>Front View</h4>
+        <h1 style="color:green">VERIFIED</h1>
+        <img src='${res.data.userProfile.kycVerification.frontImageUrl}' style="width:100px; height:100px;"/>
+        </div>
+        <div>
+        <h4>Back View</h4>
+        <img src='${res.data.userProfile.kycVerification.backImageUrl}' style="width:100px; height:100px;"/>`
+      }
+      let items = res.data.message
+        let htmlTemp =``
+        items.map((item)=>{
+          console.log(item)
+            htmlTemp+=` <tr>
+           
+            <td>
+              <p class="text-xs font-weight-bold mb-0">$${item.title}</p>
+            </td>
+            <td>
+            <p class="text-xs font-weight-bold mb-0">$${item.message}</p>
+          </td>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">$${item.message}</p>
+            </td>
+            <td class="align-middle text-center text-sm">
+            <a class="badge badge-sm bg-gradient-success" href='mailto:${res.data.userProfile.email}' >Reply
+            </a>
+          </td>
+          </tr>`
+        })
+        // withdrawList.innerHTML=htmlTemp
+      infoD.innerHTML = htmlTemp
     })
     updateBalanceForm.addEventListener("submit",(e)=>{
       e.preventDefault()
