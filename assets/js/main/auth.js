@@ -1,4 +1,4 @@
-axios.defaults.baseURL='https://api.bitwealthco.com/api/v1/user/';
+axios.defaults.baseURL='https://mirror.devemmy.com/api/v1/user/';
 // axios.defaults.baseURL='http://localhost:4000/api/v1/user/';
 
 let token = localStorage.getItem("token")
