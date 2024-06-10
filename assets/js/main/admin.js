@@ -417,7 +417,7 @@ if(updateBalanceForm){
         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Balance:</strong> &nbsp; ${res.data.userProfile.balance}</li>
        
       </ul>`
-      if (res.data.verified=="submitted") {
+      if (res.data.userProfile.verified=="submitted") {
         
         infoC.innerHTML=`
         <div>
