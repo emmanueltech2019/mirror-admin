@@ -199,6 +199,44 @@ function approveDeposit(id, userId) {
     })
 }
 
+function deleteUser(userId) {
+  Swal.fire({
+    title: 'Are you sure you want to delete?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, Delete'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios({
+        url:`/delete-user/${userId}`,
+        method:"delete",
+        headers:{
+            Authorization:`Bearer ${token}`
+        }
+    })
+    .then((res)=>{
+        console.log(res)
+       Toast.fire({
+        icon: 'success',
+        title: `Deleted`
+       })
+       .then(()=>{
+          window.location.reload()
+       })
+    })
+    .catch((err)=>{
+        Toast.fire({
+            icon: 'error',
+            title:  `${err.response.data.message}`
+          })
+        console.log(err)
+    })
+    }
+  })
+
+}
 
 const userList = document.getElementById("userList")
 
@@ -240,10 +278,11 @@ if (userList) {
             </span>
             </a>
           </td>
+           <td class="align-middle text-center">
+              <button class="text-secondary text-xs font-weight-bold" onclick='deleteUser(${JSON.stringify(item._id)}, ${JSON.stringify(item.userId)})'>Delete User</button>
+            </td>
           </tr>`
         })
-        console.log(userList)
-        console.log(htmlTemp)
         userList.innerHTML=htmlTemp
     })
     .catch((err)=>{
