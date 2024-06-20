@@ -1,5 +1,5 @@
-// axios.defaults.baseURL='https://mirror.devemmy.com/api/v1/admin/';
-axios.defaults.baseURL = "http://localhost:4000/api/v1/admin/";
+axios.defaults.baseURL='https://mirror.devemmy.com/api/v1/admin/';
+// axios.defaults.baseURL = "http://localhost:4000/api/v1/admin/";
 
 let token = localStorage.getItem("AdminToken");
 
