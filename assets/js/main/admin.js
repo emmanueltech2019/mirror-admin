@@ -446,7 +446,8 @@ function approveVerifcation(action, userId) {
 }
 
 const handleReply = async (messageId) => {
-  let replyText = document.getElementById("replyText").value;
+  let replyText = document.getElementById(`replyText-${messageId}`).value;
+  console.log(replyText);
   try {
     const response = await axios({
       method: "POST",
@@ -568,10 +569,14 @@ function getMessages(params) {
       `;
           }
           htmlTemp += `
-        <div style='display: flex'>
-        <input type="text" id='replyText' value='' />
-        <button onclick='handleReply(${JSON.stringify(item._id)})'>reply</button>
-        </div>
+        <tr>
+    <td colspan="4">
+      <div style='display: flex'>
+        <input type="text" id='replyText-${item._id}' value='' />
+        <button onclick='handleReply("${item._id}")'>Reply</button>
+      </div>
+    </td>
+  </tr>
        `;
         });
         infoD.innerHTML = htmlTemp;
