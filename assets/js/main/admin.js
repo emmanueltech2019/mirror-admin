@@ -538,14 +538,12 @@ function getMessages(params) {
         <td>
           <p class="text-xs font-weight-bold mb-0">${
             item.reason
-          }</p> <p class="text-xs text-secondary mb-0">${new Date(
-            item.created_at
-          ).toLocaleString()}</p>
+          }</p> 
         </td>
         <td class="align-middle text-center text-sm">
           <a class="badge badge-sm bg-gradient-success" href='mailto:${
             res.data.userProfile.email
-          }'>Reply</a>
+          }'>Reply Via Email</a>
         </td>
       </tr>
     `;
@@ -565,15 +563,16 @@ function getMessages(params) {
         `;
             });
             htmlTemp += `
-      
-      <input type="text" id='replyText' value='' />
-      <button onclick='handleReply(${JSON.stringify(item._id)})'>reply</button>
-     `;
-            htmlTemp += `
           </td>
         </tr>
       `;
           }
+          htmlTemp += `
+        <div style='display: flex'>
+        <input type="text" id='replyText' value='' />
+        <button onclick='handleReply(${JSON.stringify(item._id)})'>reply</button>
+        </div>
+       `;
         });
         infoD.innerHTML = htmlTemp;
       });
