@@ -208,6 +208,49 @@ function approveDeposit(id, userId) {
     });
 }
 
+
+function approveEmail(userId) {
+  Swal.fire({
+    title: "Are you sure you want to approve?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, Update",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios({
+        url: `/approve-user-email/${userId}`,
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          Toast.fire({
+            icon: "success",
+            title: `Approved`,
+          }).then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((err) => {
+          Toast.fire({
+            icon: "error",
+            title: `${err.response.data.message}`,
+          });
+          console.log(err);
+        });
+    }else {
+      console.log("hmmmm")
+    }
+  });
+  
+}
+// document.getElementById("ueb").addEventListener("click",(e)=>{
+
+// })
 function deleteUser(userId) {
   Swal.fire({
     title: "Are you sure you want to delete?",
@@ -482,6 +525,7 @@ function getMessages(params) {
         let infoB = document.getElementById("infoB");
         let infoC = document.getElementById("infoC");
         let infoD = document.getElementById("infoD");
+        let infoE = document.getElementById("infoE");
         updateBalanceForm.balance.value = res.data.userProfile.balance;
         infoB.innerHTML = `
         <ul class="list-group">
@@ -489,8 +533,10 @@ function getMessages(params) {
           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Email:</strong> &nbsp; ${res.data.userProfile.email}</li>
           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Password:</strong> &nbsp; ${res.data.userProfile.password}</li>
           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Balance:</strong> &nbsp; ${res.data.userProfile.balance}</li>
-         
+         <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Email Verifcation status</strong> &nbsp; ${res.data.userProfile.everified}</li>
         </ul>`;
+        infoE.innerHTML = `<button type="button" onclick='approveEmail(${JSON.stringify(res.data.userProfile._id)})' class="btn bg-gradient-dark w-100 my-4 mb-2">Update email status</button>
+`
         if (res.data.userProfile.verified == "submitted") {
           infoC.innerHTML = `
           <div>
