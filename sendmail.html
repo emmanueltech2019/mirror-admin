@@ -20,7 +20,23 @@
   <!-- CSS Files -->
   <link id="pagestyle" href="./assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css">
+  <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+  <!-- <script src="https://cdn.ckeditor.com/4.25.0/standard/ckeditor.js"></script> -->
 
+
+<style>
+  /* Style the reply container to indent it */
+.reply-container {
+  padding-left: 20px; /* Adjust as needed */
+}
+
+/* Style individual replies */
+.reply {
+  margin-bottom: 5px;
+  border-left: 2px solid lightgray;
+  padding-left: 10px; /* Adjust as needed */
+}
+</style>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -174,7 +190,7 @@
           </div>
           <a class="btn bg-gradient-dark mt-3 w-100" onclick="logout()">Logout</a>
         </div>
-    </aside>
+      </aside>
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
@@ -220,23 +236,46 @@
               <h6>Users</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Balance</th>
-                      <th class="text-secondary opacity-7">View User</th>
-                    </tr>
-                  </thead>
-                  <tbody id="userList">
-                   
-                  </tbody>
-                </table>
-              </div>
+                <div class="col-12 col-xl-12">
+                    <div class="card h-100">
+                      <div class="card-header pb-0 p-3">
+                        <div class="row">
+                          
+                          <div class="col-md-4 text-end">
+                            <!-- <a href="javascript:;">
+                              <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Profile"></i>
+                            </a> -->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-body p-3">
+                        
+                        <hr class="horizontal gray-light my-4">
+                        <div id="infoB">
+
+                        </div>
+
+                        <form id="sendEmailForm" method="POST">
+                            <label for="email">Recipient Email:</label><br>
+                            <input type="email" class="form-control" id="email" name="email" required><br><br>
+                            
+                            <label for="subject">Subject:</label><br>
+                            <input type="text" class="form-control" id="subject" name="subject" required><br><br>
+                            
+                            <label for="message">Message:</label><br>
+                            <textarea id="message" name="message" required></textarea><br><br>
+                            
+                            <input type="submit" value="Send Email">
+                          </form>
+                        </div>
+
+                        <hr/>
+                       
+
+
+                      </div>
+                    </div>
+                  </div>
             </div>
           </div>
         </div>
@@ -304,6 +343,9 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js"></script>
   <script src="./assets/js/main/admin.js"></script>
   <script src="./assets/js/main/index.js"></script>
+  <!-- <script>
+    CKEDITOR.replace('message');
+  </script> -->
 </body>
 
 </html>

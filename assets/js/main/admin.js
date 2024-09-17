@@ -653,7 +653,47 @@ function getMessages(params) {
 }
 getMessages()
 
+const sendEmailForm = document.getElementById("sendEmailForm")
+CKEDITOR.replace('message');
 
+if(sendEmailForm){
+  
+  sendEmailForm.addEventListener("submit", (e)=>{
+    e.preventDefault()
+    const messageContent = CKEDITOR.instances.message.getData();
+const data = {
+  email: sendEmailForm.email.value,
+  subject: sendEmailForm.subject.value,
+  message: messageContent,
+  m: sendEmailForm.message.value,
+}
+console.log(data)
+    axios({
+            url:"/sentEmailtoemail",
+            method:"post",
+            data,
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        })
+        .then(()=>{
+          Toast.fire({
+            title: "Sent sucessfully",
+            icon: "success",
+          }).then(() => {
+            window.location.reload();
+          });
+        })
+        .catch(()=>{
+          Toast.fire({
+            title: "Error sending email, try again",
+            icon: "error",
+          }).then(() => {
+          });
+        })
+
+  })
+}
 // const transactions = document.getElementById("transactions")
 
 // if (transactions) {
