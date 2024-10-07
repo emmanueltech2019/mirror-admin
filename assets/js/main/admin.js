@@ -248,6 +248,45 @@ function approveEmail(userId) {
   });
   
 }
+function approveWithdrawal2(userId) {
+  Swal.fire({
+    title: "Are you sure you want to update withdraw status?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, Update",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios({
+        url: `/approve-user-withdraw/${userId}`,
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          Toast.fire({
+            icon: "success",
+            title: `Approved`,
+          }).then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((err) => {
+          Toast.fire({
+            icon: "error",
+            title: `${err.response.data.message}`,
+          });
+          console.log(err);
+        });
+    }else {
+      console.log("hmmmm")
+    }
+  });
+  
+}
 // document.getElementById("ueb").addEventListener("click",(e)=>{
 
 // })
@@ -534,8 +573,11 @@ function getMessages(params) {
           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Password:</strong> &nbsp; ${res.data.userProfile.password}</li>
           <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Balance:</strong> &nbsp; ${res.data.userProfile.balance}</li>
          <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Email Verifcation status</strong> &nbsp; ${res.data.userProfile.everified}</li>
+         <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Withdrawal status</strong> &nbsp; ${res.data.userProfile?.withdrawStatus ==false?'Blocked':'Open to withdraw'}</li>
         </ul>`;
-        infoE.innerHTML = `<button type="button" onclick='approveEmail(${JSON.stringify(res.data.userProfile._id)})' class="btn bg-gradient-dark w-100 my-4 mb-2">Update email status</button>
+        infoE.innerHTML = `
+        <button type="button" onclick='approveEmail(${JSON.stringify(res.data.userProfile._id)})' class="btn bg-gradient-dark w-100 my-4 mb-2">Update email status</button><br/>
+        <button type="button" onclick='approveWithdrawal2(${JSON.stringify(res.data.userProfile._id)})' class="btn bg-gradient-dark w-100 my-4 mb-2">Update withdrawal status</button>
 `
         if (res.data.userProfile.verified == "submitted") {
           infoC.innerHTML = `
