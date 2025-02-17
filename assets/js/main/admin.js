@@ -116,6 +116,12 @@ if (depositsList) {
               )}, ${JSON.stringify(item.userId)})'>Approve Deposit
               </span>
             </td>
+            <td class="align-middle text-center text-sm">
+              <span class="badge badge-sm bg-gradient-danger" onclick='deleteDeposit(${JSON.stringify(
+                item._id
+              )}, ${JSON.stringify(item.userId)})'>Delete Record
+              </span>
+            </td>
           </tr>`;
       });
       // console.log(htmlTemp, content)
@@ -208,6 +214,36 @@ function approveDeposit(id, userId) {
     });
 }
 
+function deleteDeposit(id, userId) {
+  console.log(id, userId);
+  axios({
+    url: "/deposit/delete",
+    method: "post",
+    data: {
+      userId,
+      depositId: id,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      console.log(res);
+      Toast.fire({
+        icon: "success",
+        title: `${res.data.message}`,
+      }).then(() => {
+        window.location.reload();
+      });
+    })
+    .catch((err) => {
+      Toast.fire({
+        icon: "error",
+        title: `${err.response.data.message}`,
+      });
+      console.log(err);
+    });
+}
 
 function approveEmail(userId) {
   Swal.fire({
